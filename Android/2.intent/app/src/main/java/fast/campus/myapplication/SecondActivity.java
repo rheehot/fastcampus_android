@@ -13,11 +13,17 @@ public class SecondActivity extends AppCompatActivity {
         Log.d("lifecycle","1: onCreate");
         setContentView(R.layout.activity_second);
 
-        Intent intent = getIntent();
-        int data = intent.getIntExtra("INTENT_KEY", 0);
-        String stringData = intent.getStringExtra("INTENT_KEY_STRING");
-        Log.d("intent_key","" + data);
-        Log.d("intent_key","" + stringData);
+//        Intent intent = getIntent();
+//        int data = intent.getIntExtra("INTENT_KEY", 0);
+//        String stringData = intent.getStringExtra("INTENT_KEY_STRING");
+//        Log.d("intent_key","" + data);
+//        Log.d("intent_key","" + stringData);
+
+        //작업을 마친 후 ...
+        Intent intent = new Intent();
+        intent.putExtra("RESULT","성공");
+        setResult(200, intent);
+        finish(); //스스로 종료 main activity로 전환
     }
 
     @Override
