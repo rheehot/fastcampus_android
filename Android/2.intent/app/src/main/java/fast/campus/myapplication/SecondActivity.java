@@ -1,5 +1,6 @@
 package fast.campus.myapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,12 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("lifecycle","1: onCreate");
         setContentView(R.layout.activity_second);
+
+        Intent intent = getIntent();
+        int data = intent.getIntExtra("INTENT_KEY", 0);
+        String stringData = intent.getStringExtra("INTENT_KEY_STRING");
+        Log.d("intent_key","" + data);
+        Log.d("intent_key","" + stringData);
     }
 
     @Override
