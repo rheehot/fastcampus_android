@@ -75,9 +75,8 @@ public class MainActivity extends AppCompatActivity {
 //                LinearLayoutManager.HORIZONTAL, false);
 
 
-//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3,
-                LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
+//        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3,LinearLayoutManager.HORIZONTAL, false);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(new MyAdapter(itemList));
