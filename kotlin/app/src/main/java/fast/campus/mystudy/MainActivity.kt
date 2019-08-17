@@ -3,6 +3,7 @@ package fast.campus.mystudy
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import fast.campus.mystudy.Step1.FirstClass
+import fast.campus.mystudy.Step1.NumberTest
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         // 우리가 만든 예제들을 이곳에서 코딩
 
-        doTest(FirstClass(::WriteLn))
+        doTest(NumberTest(::WriteLn))
     }
 
     private fun doTest(o : TestClass){
