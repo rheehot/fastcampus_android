@@ -6,6 +6,7 @@ import fast.campus.mystudy.Step1.ExceptionTest
 import fast.campus.mystudy.Step1.FirstClass
 import fast.campus.mystudy.Step1.NumberTest
 import fast.campus.mystudy.step2.ClassTest
+import fast.campus.mystudy.step2.InterfaceAbstractTest
 import fast.campus.mystudy.step2.PolymorphTest
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -17,7 +18,8 @@ class MainActivity : AppCompatActivity() {
 
         // 우리가 만든 예제들을 이곳에서 코딩
 
-        doTest(PolymorphTest(::WriteLn))
+//        doTest(PolymorphTest(::WriteLn))
+        doTest(InterfaceAbstractTest(::WriteLn))
     }
 
     private fun doTest(o : TestClass){
