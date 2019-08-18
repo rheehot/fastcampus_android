@@ -3,6 +3,7 @@ package fast.campus.mystudy
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import fast.campus.mystudy.Step1.*
+import fast.campus.mystudy.Step3.LambdasTest
 import fast.campus.mystudy.step2.*
 //import fast.campus.mystudy.step3.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +19,8 @@ class MainActivity : AppCompatActivity() {
 //        doTest(PolymorphTest(::WriteLn))
 //        doTest(InterfaceAbstractTest(::WriteLn))
 //        doTest(DataClassTest(::WriteLn))
-        doTest(ObjectTest(::WriteLn))
+//        doTest(ObjectTest(::WriteLn))
+        doTest(LambdasTest(::WriteLn))
 
         // using 확장함수
 //        setClickHandler()
