@@ -3,6 +3,7 @@ package fast.campus.mystudy
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import fast.campus.mystudy.Step1.*
+import fast.campus.mystudy.Step3.ExtFunctionTest
 import fast.campus.mystudy.Step3.LambdasTest
 import fast.campus.mystudy.step2.*
 //import fast.campus.mystudy.step3.*
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
 //        doTest(InterfaceAbstractTest(::WriteLn))
 //        doTest(DataClassTest(::WriteLn))
 //        doTest(ObjectTest(::WriteLn))
-        doTest(LambdasTest(::WriteLn))
+//        doTest(LambdasTest(::WriteLn))
+        doTest(ExtFunctionTest(::WriteLn))
 
         // using 확장함수
 //        setClickHandler()
