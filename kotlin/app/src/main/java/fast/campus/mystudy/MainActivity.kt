@@ -5,8 +5,6 @@ import android.os.Bundle
 import fast.campus.mystudy.Step1.*
 import fast.campus.mystudy.step2.*
 //import fast.campus.mystudy.step3.*
-import fast.campus.mystudy.step2.InterfaceAbstractTest
-import fast.campus.mystudy.step2.PolymorphTest
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -19,7 +17,9 @@ class MainActivity : AppCompatActivity() {
 
 //        doTest(PolymorphTest(::WriteLn))
 //        doTest(InterfaceAbstractTest(::WriteLn))
-        doTest(DataClassTest(::WriteLn))
+//        doTest(DataClassTest(::WriteLn))
+        doTest(ObjectTest(::WriteLn))
+
         // using 확장함수
 //        setClickHandler()
     }
