@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity() {
 //        doTest(DSLTest(::WriteLn))
 //        doTest(CurryingTest(::WriteLn))
 //        doTest(infixTest(::WriteLn))
-        doTest(multiReturnTest(::WriteLn))
+//        doTest(multiReturnTest(::WriteLn))
+        doTest(latelazyTest(::WriteLn))
 
 
         // using 확장함수
