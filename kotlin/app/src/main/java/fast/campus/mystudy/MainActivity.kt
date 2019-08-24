@@ -25,7 +25,9 @@ class MainActivity : AppCompatActivity() {
 //        doTest(ClosureTest(::WriteLn))
 //        doTest(DSLTest(::WriteLn))
 //        doTest(CurryingTest(::WriteLn))
-        doTest(infixTest(::WriteLn))
+//        doTest(infixTest(::WriteLn))
+        doTest(multiReturnTest(::WriteLn))
+
 
         // using 확장함수
 //        setClickHandler()
