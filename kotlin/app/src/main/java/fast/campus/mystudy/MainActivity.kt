@@ -3,10 +3,7 @@ package fast.campus.mystudy
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import fast.campus.mystudy.Step1.*
-import fast.campus.mystudy.Step3.ClosureTest
-import fast.campus.mystudy.Step3.DSLTest
-import fast.campus.mystudy.Step3.ExtFunctionTest
-import fast.campus.mystudy.Step3.LambdasTest
+import fast.campus.mystudy.Step3.*
 import fast.campus.mystudy.step2.*
 //import fast.campus.mystudy.step3.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,7 +23,9 @@ class MainActivity : AppCompatActivity() {
 //        doTest(LambdasTest(::WriteLn))
 //        doTest(ExtFunctionTest(::WriteLn))
 //        doTest(ClosureTest(::WriteLn))
-        doTest(DSLTest(::WriteLn))
+//        doTest(DSLTest(::WriteLn))
+//        doTest(CurryingTest(::WriteLn))
+        doTest(infixTest(::WriteLn))
 
         // using 확장함수
 //        setClickHandler()
