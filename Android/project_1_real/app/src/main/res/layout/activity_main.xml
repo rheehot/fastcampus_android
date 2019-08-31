@@ -32,6 +32,7 @@
     </include>
 
     <TextView
+        android:id="@+id/upload_image"
         android:layout_width="match_parent"
         android:text="@string/upload_image"
         android:layout_height="@dimen/button_height"
