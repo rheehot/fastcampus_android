@@ -1,13 +1,18 @@
 package fast.campus.myvision.api
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.util.Log
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.main_analyze_view.*
 import java.io.File
 import java.util.jar.Manifest
 
@@ -15,7 +20,8 @@ class MainActivity : AppCompatActivity() {
 
     private val CAMERA_PERMISSION_REQUEST = 1000
     private val GALLERY_PERMISSION_REQUEST = 1001
-    private val FILE_NAME ="picture.jpg"
+    private val FILE_NAME = "picture.jpg"
+    private var uploadChooser: UploadChooser? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,23 +30,23 @@ class MainActivity : AppCompatActivity() {
         setupListener()
     }
 
-    private fun setupListener(){
+    private fun setupListener() {
 
-      upload_image.setOnClickListener{
+        upload_image.setOnClickListener {
 
-//            UploadChooser().show(supportFragmentManager, "")
+            //            UploadChooser().show(supportFragmentManager, "")
             UploadChooser().apply {
-                addNotifier(object : UploadChooser.UploadChooseNotifierInterface{
+                addNotifier(object : UploadChooser.UploadChooseNotifierInterface {
 
                     override fun cameraOnClick() {
 //                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                        Log.d("upload","cameraOnClick")
+                        Log.d("upload", "cameraOnClick")
                         //카메라 권한
                         checkCameraPermission()
                     }
 
                     override fun gallaryOnClick() {
-                        Log.d("upload","gallaryOnClick")
+                        Log.d("upload", "gallaryOnClick")
                         //Storage 읽기 권한이 더 맞음
                         checkGalleryPermission()
                     }
@@ -93,6 +99,49 @@ class MainActivity : AppCompatActivity() {
             Intent.createChooser(intent, "Select a photo"),
             GALLERY_PERMISSION_REQUEST
         )
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            CAMERA_PERMISSION_REQUEST -> {
+                if (resultCode != Activity.RESULT_OK) return
+                val photoUri = FileProvider.getUriForFile(
+                    this,
+                    applicationContext.packageName + ".provider",
+                    createCameraFile()
+                )
+                uploadImage(photoUri)
+            }
+            GALLERY_PERMISSION_REQUEST -> data?.let { uploadImage(it.data) }
+        }
+    }
+
+    private fun uploadImage(imageUri: Uri) {
+        val bitmap: Bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+        //1
+        uploaded_image.setImageBitmap(bitmap)
+        //2
+        uploaded_image.setImageBitmap(MediaStore.Images.Media.getBitmap(contentResolver,imageUri))
+
+//        uploadChooser?.dismiss()
+//        DetectionChooser().apply {
+//            addDetectionChooserNotifierInterface(object : DetectionChooser
+//            .DetectionChooserNotifierInterface {
+//                override fun detectLabel() {
+//                    findViewById<ImageView>(R.id.uploaded_image).setImageBitmap(bitmap)
+//                    requestCloudVisionApi(bitmap, LABEL_DETECTION_REQUEST)
+//
+//                }
+//
+//                override fun detectLandmark() {
+//                    findViewById<ImageView>(R.id.uploaded_image).setImageBitmap(bitmap)
+//                    requestCloudVisionApi(bitmap, LANDMARK_DETECTION_REQUEST)
+//                }
+//            })
+//        }.show(supportFragmentManager, "")
+
     }
 
     override fun onRequestPermissionsResult(
