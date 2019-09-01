@@ -11,7 +11,7 @@ class UploadChooser : BottomSheetDialogFragment(){
 
     interface  UploadChooseNotifierInterface{
         fun cameraOnClick()
-        fun gallaryOnClick()
+        fun galleryOnClick()
     }
 
     var uploadChooserNotifierInterface : UploadChooseNotifierInterface? = null
@@ -41,7 +41,7 @@ class UploadChooser : BottomSheetDialogFragment(){
         }
 
         upload_gallary.setOnClickListener{
-         uploadChooserNotifierInterface?.gallaryOnClick()
+         uploadChooserNotifierInterface?.galleryOnClick()
         }
     }
 }
