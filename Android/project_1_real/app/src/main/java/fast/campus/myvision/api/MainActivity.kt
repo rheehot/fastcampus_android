@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     val LANDMARK_DETECTION_REQUEST = "landmark_detection_request"
     private var requestType: String? = null
 
-    private val CLOUD_VISION_API_KEY = "AIzaSyD4Icf8afoiO4n--48I58gRe6B320UuZhE"
+    private val CLOUD_VISION_API_KEY = "--48I58gRe6B320UuZhE"
     private val ANDROID_PACKAGE_HEADER = "X-Android-Package"
     private val ANDROID_CERT_HEADER = "X-Android_Cert"
     private val MAX_RESULTS = 10
