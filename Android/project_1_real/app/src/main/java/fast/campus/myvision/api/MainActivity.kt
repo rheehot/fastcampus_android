@@ -12,11 +12,15 @@ import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.util.Log
 import android.widget.ImageView
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.services.vision.v1.Vision
-import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse
-import com.google.api.services.vision.v1.model.EntityAnnotation
+import com.google.api.services.vision.v1.VisionRequest
+import com.google.api.services.vision.v1.VisionRequestInitializer
+import com.google.api.services.vision.v1.model.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.main_analyze_view.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.lang.ref.WeakReference
 import java.util.*
@@ -32,6 +36,11 @@ class MainActivity : AppCompatActivity() {
     val LABEL_DETECTION_REQUEST = "label_detection_request"
     val LANDMARK_DETECTION_REQUEST = "landmark_detection_request"
     private var requestType: String? = null
+
+    private val CLOUD_VISION_API_KEY = "AIzaSyD4Icf8afoiO4n--48I58gRe6B320UuZhE"
+    private val ANDROID_PACKAGE_HEADER = "X-Android-Package"
+    private val ANDROID_CERT_HEADER = "X-Android_Cert"
+    private val MAX_RESULTS = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 //                addNotifier(object : UploadChooser.UploadChooseNotifierInterface {
 //
 //                    override fun cameraOnClick() {
-////                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//
 //                        Log.d("upload", "cameraOnClick")
 //                        //카메라 권한
 //                        checkCameraPermission()
@@ -154,6 +163,7 @@ class MainActivity : AppCompatActivity() {
 //        uploaded_image.setImageBitmap(MediaStore.Images.Media.getBitmap(contentResolver,imageUri))
 
         uploadChooser?.dismiss()
+        requestCloudVisionApi(bitmap)
 
 //        DetectionChooser().apply {
 //            addDetectionChooserNotifierInterface(object : DetectionChooser
@@ -173,13 +183,64 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun requestCloudVisionApi(bitmap: Bitmap, requestType: String) {
-//        labelDetectionTask?.requestCloudVisionApi(bitmap, object : LabelDetectionTask
-//        .LabelDetectionNotifierInterface {
-//            override fun notifiyResult(result: String) {
-//                uploaded_image_result.text = result
-//            }
-//        }, requestType)
+    private fun requestCloudVisionApi(
+        bitmap: Bitmap
+    ) {
+        val visionTask = ImageRequestTask(this, prepareImageRequest(bitmap))
+        visionTask.execute()
+    }
+
+    private fun prepareImageRequest(bitmap: Bitmap): Vision.Images.Annotate {
+        val httpTransport = AndroidHttp.newCompatibleTransport()
+        val jsonFactory = GsonFactory.getDefaultInstance()
+
+        val requestInitializer = object : VisionRequestInitializer(CLOUD_VISION_API_KEY) {
+            override fun initializeVisionRequest(request: VisionRequest<*>?) {
+                super.initializeVisionRequest(request)
+                val packageName = packageName
+                request?.requestHeaders?.set(ANDROID_PACKAGE_HEADER, packageName)
+                val sig = PackageManagerUtil().getSignature(packageManager, packageName)
+                request?.requestHeaders?.set(ANDROID_CERT_HEADER, sig)
+            }
+        }
+        val builder = Vision.Builder(httpTransport, jsonFactory, null)
+        builder.setVisionRequestInitializer(requestInitializer)
+        val vision = builder.build()
+
+        val batchAnnotateImageRequest = BatchAnnotateImagesRequest()
+        batchAnnotateImageRequest.requests = object : ArrayList<AnnotateImageRequest>() {
+            init {
+                val annotateImageRequest = AnnotateImageRequest()
+
+                val base64EncodedImage = Image()
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
+                val imageBytes = byteArrayOutputStream.toByteArray()
+
+                base64EncodedImage.encodeContent(imageBytes)
+                annotateImageRequest.image = base64EncodedImage
+
+                annotateImageRequest.features = object : ArrayList<Feature>() {
+                    init {
+                        val labelDetection = Feature()
+                        when (requestType) {
+                            LABEL_DETECTION_REQUEST -> {
+                                labelDetection.type = "LABEL_DETECTION"
+                            }
+                            LANDMARK_DETECTION_REQUEST -> {
+                                labelDetection.type = "LANDMARK_DETECTION"
+                            }
+                        }
+                        labelDetection.maxResults = MAX_RESULTS
+                        add(labelDetection)
+                    }
+                }
+                add(annotateImageRequest)
+            }
+        }
+        val annotateRequest = vision.images().annotate(batchAnnotateImageRequest)
+        annotateRequest.setDisableGZipContent(true)
+        return annotateRequest
     }
 
     inner class ImageRequestTask constructor(
@@ -195,7 +256,8 @@ class MainActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: Any?): String {
             try {
                 val response = request.execute()
-                return findProperResponseType(response)
+//                return findProperResponseType(response)
+                return convertResponseToString(response)
 
             } catch (e: Exception) {
             }
@@ -203,33 +265,48 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPostExecute(result: String?) {
+
             val activity = weakReference.get()
-//            if (activity != null && !activity.isFinishing) {
+            if (activity != null && !activity.isFinishing) {
+                uploaded_image_result.text = result
 //                result?.let { labelDetectionNotifierInterface?.notifiyResult(it) }
+            }
+        }
+    }
+
+//    private fun convertResponseToString(labels: List<EntityAnnotation>): String {
+//        val message = StringBuilder("분석 결과\n")
+//        labels.forEach {
+//            message.append(String.format(Locale.US, "%.3f: %s", it.score, it.description))
+//            message.append("\n")
+//        }
+//        return message.toString()
+//    }
+
+        private fun convertResponseToString(response: BatchAnnotateImagesResponse): String {
+            val message = StringBuilder("분석 결과\n")
+            val labels = response.responses[0].labelAnnotations
+            labels?.let {
+                it.forEach {
+                    message.append(String.format(Locale.US, "%.3f: %s", it.score, it.description))
+                    message.append("\n")
+                }
+                return message.toString()
+            }
+            return "분석 실패"
+        }
+
+//    private fun findProperResponseType(response: BatchAnnotateImagesResponse): String {
+//        when (requestType) {
+//            activity.LABEL_DETECTION_REQUEST -> {
+//                return convertResponseToString(response.responses[0].labelAnnotations)
 //            }
-        }
-    }
-
-    private fun convertResponseToString(labels: List<EntityAnnotation>): String {
-        val message = StringBuilder("분석 결과\n")
-        labels.forEach {
-            message.append(String.format(Locale.US, "%.3f: %s", it.score, it.description))
-            message.append("\n")
-        }
-        return message.toString()
-    }
-
-    private fun findProperResponseType(response: BatchAnnotateImagesResponse): String {
-        when (requestType) {
-            activity.LABEL_DETECTION_REQUEST -> {
-                return convertResponseToString(response.responses[0].labelAnnotations)
-            }
-            activity.LANDMARK_DETECTION_REQUEST -> {
-                return convertResponseToString(response.responses[0].landmarkAnnotations)
-            }
-        }
-        return "분석 실패"
-    }
+//            activity.LANDMARK_DETECTION_REQUEST -> {
+//                return convertResponseToString(response.responses[0].landmarkAnnotations)
+//            }
+//        }
+//        return "분석 실패"
+//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -256,8 +333,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
+    
     private fun createCameraFile(): File {
         val dir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File(dir, FILE_NAME)
