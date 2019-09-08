@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1009345936554",
+    "firebase_url": "https://fastcampus-weather-a02ed.firebaseio.com",
+    "project_id": "fastcampus-weather-a02ed",
+    "storage_bucket": "fastcampus-weather-a02ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009345936554:android:6d2b35c2b00cdbab5e24d3",
+        "android_client_info": {
+          "package_name": "weather.fastcampus.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009345936554-l3ipp48tva1dv9qf73hkm47p5onrgilv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "weather.fastcampus.myapplication",
+            "certificate_hash": "a4cf9cf47d52ac2b7088ce6ac7da5551ccf03db4"
+          }
+        },
+        {
+          "client_id": "1009345936554-li4gtbenc5564er47l2oatu1os3e87vg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARBTRZGPv3aeLiF9neTcX0pEoUk3pMh2U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009345936554-li4gtbenc5564er47l2oatu1os3e87vg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
