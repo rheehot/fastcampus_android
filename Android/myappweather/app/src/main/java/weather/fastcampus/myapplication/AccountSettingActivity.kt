@@ -12,13 +12,16 @@ class AccountSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_setting)
+
+        setupListener()
     }
 
     private fun setupListener(){
-
-        setupListener()
-
+        account_setting_back.setOnClickListener{ onBackPressed() }
+        account_setting_logout.setOnClickListener{ signoutAccount() }
+        account_setting_delete.setOnClickListener{ deleteAccount() }
     }
+
     private fun signoutAccount(){
         AuthUI.getInstance()
             .signOut(this)
