@@ -19,7 +19,7 @@ class AccountSettingActivity : AppCompatActivity() {
     private fun setupListener(){
         account_setting_back.setOnClickListener{ onBackPressed() }
         account_setting_logout.setOnClickListener{ signoutAccount() }
-        account_setting_delete.setOnClickListener{ deleteAccount() }
+        account_setting_delete.setOnClickListener{ showDeleteDialg() }
     }
 
     private fun signoutAccount(){
@@ -39,6 +39,31 @@ class AccountSettingActivity : AppCompatActivity() {
                 Toast.makeText(this,"탈퇴 하셨습니다!", Toast.LENGTH_LONG).show()
                 moveToMainActivity()
             }
+    }
+
+    private fun showDeleteDialg(){
+
+//        AccountDeleteDialog().apply {
+//            addAccountDeleteDialogInterface(object : AccountDeleteDialog.AccountDeleteDialogInterface{
+//                override fun delete() {
+//                   deleteAccount()
+//                }
+//
+//                override fun cancelDelete() {
+//                }
+//            })
+//        }.show(supportFragmentManager, "")
+
+        val accountDeleteDialog = AccountDeleteDialog()
+        accountDeleteDialog.addAccountDeleteDialogInterface(object : AccountDeleteDialog.AccountDeleteDialogInterface{
+            override fun delete() {
+                deleteAccount()
+            }
+
+            override fun cancelDelete() {
+            }
+        })
+        accountDeleteDialog.show(supportFragmentManager, "")
     }
 
     private fun moveToMainActivity() {
