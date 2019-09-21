@@ -10,7 +10,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class WeatherApplication : Application() {
 
-
     var service : Service? = null
 
     override fun onCreate() {

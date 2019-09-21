@@ -39,7 +39,7 @@ class OpenWeatherActivity : AppCompatActivity() {
             })
     }
 
-
+//chrome://inspect/#devices
 //    private fun setupRetrofit(){
 //
 //        val retrofit = Retrofit.Builder()
